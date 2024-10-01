@@ -14,7 +14,7 @@
         <!-- Auto-updating list of images -->
         <script>
             const repo = "https://github.com/shrijaybaheti/spyware";
-            const path = "screenshots"; // Folder where your screenshots are stored
+            const path = "/"; // Folder where your screenshots are stored
 
             fetch(repo + "/contents/" + path)
                 .then(response => response.json())
@@ -22,7 +22,7 @@
                     data.forEach(file => {
                         if (file.name.endsWith(".png")) {
                             let img = document.createElement("img");
-                            img.src = repo + "/raw/master/" + file.path;
+                            img.src = repo + "/raw/main/" + file.path;
                             img.style = "width: 400px; height: auto; margin: 10px;";
                             document.getElementById("screenshots").appendChild(img);
                         }
