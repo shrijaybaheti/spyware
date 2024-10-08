@@ -13,6 +13,14 @@
             height: auto;
             margin: 10px;
         }
+        #keylog-content {
+            white-space: pre-wrap; /* Preserve formatting (line breaks) */
+            background-color: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ccc;
+            max-height: 300px;
+            overflow-y: auto;
+        }
     </style>
 </head>
 <body>
@@ -55,8 +63,25 @@
     </div>
 
     <h2>Keylogs</h2>
-    <!-- Keylog file link -->
-    <a href="https://github.com/shrijaybaheti/spyware/raw/main/keylog.txt" download>Download Keylog</a>
+    <div id="keylog-content">Loading keylogs...</div>
+    <script>
+        const keylogUrl = "https://raw.githubusercontent.com/shrijaybaheti/spyware/main/keylog.txt";
+        
+        fetch(keylogUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok.');
+                }
+                return response.text(); // Get the text content of the keylog file
+            })
+            .then(data => {
+                document.getElementById("keylog-content").innerText = data; // Display keylog content
+            })
+            .catch(error => {
+                document.getElementById("keylog-content").innerText = "Error loading keylog.";
+                console.error('Error fetching keylog:', error);
+            });
+    </script>
 
 </body>
 </html>
