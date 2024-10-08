@@ -5,37 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Remote Monitoring - Latest Screenshot and Keylogs</title>
     <style>
-        /* Global styling */
+        /* Global Styling */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f4f8;
+            font-family: 'Poppins', Arial, sans-serif;
+            background-color: #e8eef1;
             margin: 0;
             padding: 20px;
-            color: #333;
+            color: #2c3e50;
+            line-height: 1.6;
         }
 
         h1, h2 {
-            color: #2c3e50;
+            color: #34495e;
             text-align: center;
+            font-weight: 600;
         }
 
         h1 {
-            font-size: 2.5em;
+            font-size: 2.8em;
+            margin-bottom: 15px;
         }
 
         h2 {
             font-size: 1.8em;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         /* Centered content container */
         .container {
             max-width: 900px;
             margin: 0 auto;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
         }
 
         /* Screenshot styling */
@@ -45,32 +48,80 @@
             max-width: 600px;
             height: auto;
             margin: 20px auto;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        #latest-screenshot img:hover {
+            transform: scale(1.05); /* Slight zoom on hover */
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
         }
 
         /* Keylog styling */
         #keylog-content {
             background-color: #f7f9fb;
-            padding: 15px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #ccd6dd;
+            border-radius: 12px;
             max-height: 400px;
             overflow-y: auto;
             font-family: 'Courier New', Courier, monospace;
             white-space: pre-wrap;
-            color: #2d3436;
+            color: #34495e;
             margin: 20px 0;
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+            box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Scrollbar Styling */
+        #keylog-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #keylog-content::-webkit-scrollbar-thumb {
+            background-color: #bdc3c7;
+            border-radius: 8px;
+        }
+
+        /* Button styling */
+        .refresh-btn {
+            display: block;
+            margin: 0 auto 20px;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            background-color: #2980b9;
+        }
+
+        /* Animation */
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
 
         /* Responsive styling */
         @media (max-width: 768px) {
             h1 {
-                font-size: 2em;
+                font-size: 2.2em;
             }
             h2 {
-                font-size: 1.5em;
+                font-size: 1.6em;
             }
             #latest-screenshot img {
                 width: 100%;
@@ -80,7 +131,7 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container fade-in">
         <h1>Remote Monitoring</h1>
         <h2>Latest Screenshot</h2>
         <div id="latest-screenshot">
@@ -116,24 +167,30 @@
         </div>
 
         <h2>Keylogs</h2>
+        <button class="refresh-btn" onclick="refreshKeylog()">Refresh Keylogs</button>
         <div id="keylog-content">Loading keylogs...</div>
         <script>
             const keylogUrl = "https://raw.githubusercontent.com/shrijaybaheti/spyware/main/logs/keylog.txt";
-            
-            fetch(keylogUrl)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok.');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    document.getElementById("keylog-content").innerText = data;
-                })
-                .catch(error => {
-                    document.getElementById("keylog-content").innerText = "Error loading keylogs.";
-                    console.error('Error fetching keylog:', error);
-                });
+
+            function refreshKeylog() {
+                fetch(keylogUrl)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok.');
+                        }
+                        return response.text();
+                    })
+                    .then(data => {
+                        document.getElementById("keylog-content").innerText = data;
+                    })
+                    .catch(error => {
+                        document.getElementById("keylog-content").innerText = "Error loading keylogs.";
+                        console.error('Error fetching keylog:', error);
+                    });
+            }
+
+            // Automatically load keylogs on page load
+            refreshKeylog();
         </script>
     </div>
 </body>
