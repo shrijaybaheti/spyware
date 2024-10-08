@@ -80,7 +80,6 @@
 
         /* Styles for the login form */
         #login-form {
-            display: none; /* Initially hidden */
             margin-bottom: 20px;
         }
         #login-form input {
@@ -302,7 +301,7 @@
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
-            if (username === "shrijay_baheti" && password === "shrjay@2007") { // Replace with real validation
+            if (username === "admin" && password === "password") { // Replace with real validation
                 document.getElementById('login-form').style.display = 'none';
                 document.getElementById('main-content').style.display = 'block';
                 fetchLatestScreenshot(); // Fetch the latest screenshot after login
