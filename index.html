@@ -161,6 +161,10 @@
         <script>
             const keylogUrl = "https://raw.githubusercontent.com/shrijaybaheti/spyware/main/logs/keylog.txt";
 
+            // Data arrays for the chart
+            let keyPressData = []; // Store counts of key presses
+            let timestamps = []; // Store timestamps
+
             // Function to fetch keylogs
             function fetchKeylog() {
                 fetch(keylogUrl)
@@ -226,10 +230,6 @@
                     }
                 }
             });
-
-            // Data arrays for the chart
-            let keyPressData = []; // Store counts of key presses
-            let timestamps = []; // Store timestamps
 
             // Function to update the activity chart
             function updateActivityChart(keylog) {
