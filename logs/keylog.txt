@@ -1,2 +1,1 @@
- Key.tab  Key.tab g Key.right 
-shrijay Key.shift @2007
+test keylog Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace shrijay Key.shift @2007
