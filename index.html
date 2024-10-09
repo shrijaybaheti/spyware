@@ -320,32 +320,34 @@
         function saveCommands() {
             const updatedContent = document.getElementById('commands-content').value;
             const encodedContent = btoa(updatedContent); // Encode content to base64
-    
+        
             const body = {
                 message: "Updated commands.txt via website",
                 content: encodedContent,
                 sha: commandsSha // Use the SHA fetched earlier
             };
-    
+        
             fetch(commandsUrl, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
-                   "Authorization": "token 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" // Replace with your GitHub token
+                    "Authorization": "token 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" // Replace with your GitHub token
                 },
                 body: JSON.stringify(body)
             })
             .then(response => {
-                if (response.ok) {
-                    alert('Commands saved successfully!');
-                    fetchCommands(); // Refresh the commands content
-                } else {
-                    throw new Error('Failed to save commands.');
+                if (!response.ok) {
+                    // Log the error status and text for more information
+                    return response.json().then(errorData => {
+                        throw new Error(`Failed to save commands: ${errorData.message}`);
+                    });
                 }
+                alert('Commands saved successfully!');
+                fetchCommands(); // Refresh the commands content
             })
-            .catch(error => logError('Error saving commands: ' + error));
+            .catch(error => logError('Error saving commands: ' + error.message));
         }
-    
+
         function logError(message) {
             console.error(message);
             alert(message);
