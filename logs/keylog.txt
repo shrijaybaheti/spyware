@@ -1,1 +1,0 @@
- Key.ctrl_l  Key.shift  Key.shift  Key.esc 
