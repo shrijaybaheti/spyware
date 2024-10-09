@@ -1,2 +1,2 @@
- Key.alt_l  Key.tab  Key.tab  Key.up /clic Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace /type  Key.shift  Key.shift  Key.shift  Key.shift "" Key.left te Key.backspace est
-testtesttesttesttesttesttesttesttesttesttesttest
+ Key.backspace  Key.alt_l  Key.tab  Key.alt_l  Key.tab  Key.tab  Key.tab  Key.backspace  Key.backspace  Key.backspace  Key.backspace met
+ Key.alt_l  Key.tab  Key.alt_l  Key.tab  Key.tab  Key.tab  Key.tab  Key.tab  Key.tab met
