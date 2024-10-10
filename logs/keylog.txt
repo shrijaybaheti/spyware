@@ -1,2 +1,1 @@
-g Key.right 
-this is spyware v4 remote desktop control
+ Key.backspace 4 Key.right  Key.right  Key.right  Key.right  Key.right  Key.right  Key.backspace  Key.backspace 46this is spyware v4 remote desktop control
