@@ -1,2 +1,2 @@
-
+ Key.ctrl_l  Key.shift  Key.shift  Key.shift  Key.shift  Key.shift  Key.shift  Key.ctrl_l  Key.ctrl_l  Key.ctrl_l  Key.ctrl_l  Key.ctrl_l  Key.ctrl_l  Key.ctrl_l  Key.ctrl_l 
 shrijay Key.shift @2007
