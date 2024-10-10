@@ -1,4 +1,1 @@
- Key.backspace 
-shrijay Key.shift @2007
-shrijay Key.shift @2007
- Key.backspace 
+shrijay Key.shift @2007 Key.alt_l  Key.tab 
