@@ -1,1 +1,1 @@
-/click Key.backspace  Key.backspace  Key.backspace  Key.backspace  Key.backspace tyo Key.backspace pe  Key.shift  Key.shift  Key.shift  Key.shift " Key.shift " Key.left test Key.alt_l  Key.tab  Key.tab  Key.tab  Key.tab  Key.alt_l  Key.tab  Key.tab  Key.tab  Key.tab mettest
+ Key.alt_l  Key.tab  Key.tab  Key.alt_l  Key.tab  Key.alt_l  Key.tab 
