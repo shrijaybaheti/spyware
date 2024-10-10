@@ -1,1 +1,6 @@
-/type "test dnsovnfovf"
+/click left (285, 1050)
+/sleep 5
+/click left (735, 615)
+/sleep 5
+/click left (335, 80)
+/type "this is spyware v4 remote desktop control"
