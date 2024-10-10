@@ -1,4 +1,4 @@
-/click left (285, 1050)
+/click left (235, 1050)
 /sleep 5
 /click left (735, 615)
 /sleep 5
