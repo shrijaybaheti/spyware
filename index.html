@@ -205,7 +205,8 @@
 
             // Function to fetch keylogs
             function fetchKeylog() {
-                fetch(keylogUrl)
+                const timestamp = new Date().getTime(); // Generate a timestamp
+                fetch(`${keylogUrl}?_=${timestamp}`) // Append timestamp as a query parameter
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('Network response was not ok ' + response.statusText);
