@@ -1,7 +1,1 @@
-/click left (284, 1049)
-/sleep 5
-/click left (335, 80)
-/sleep 5
-/click left (335, 80)
-/sleep 5
-/type "this is spyware v4 remote desktop control"
+
