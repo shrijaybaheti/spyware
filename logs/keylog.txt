@@ -1,2 +1,1 @@
-gi Key.right 
- Key.left  Key.backspace 3this is spyware v4 remote desktop control
+this is spyware v4 remote desktop control
