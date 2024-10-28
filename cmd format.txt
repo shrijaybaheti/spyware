@@ -1,0 +1,74 @@
+1. Click Command: /click [button] (x, y)
+Format: /click [button] (x, y)
+Parameters:
+button:
+Options: "left" or "right".
+Note: If the button name is misspelled or not recognized, it won't execute the click.
+(x, y):
+Coordinates on the screen.
+Issue: If the coordinates are outside the screen bounds or formatted incorrectly, the command may fail.
+Example: /click left (100, 200)
+
+2. Drag Command: /drag (x1, y1) (x2, y2)
+Format: /drag (x1, y1) (x2, y2)
+Parameters:
+(x1, y1): Starting coordinates.
+(x2, y2): Ending coordinates.
+Issues: Similar to the click command, if the coordinates are incorrect or outside the screen bounds, dragging may not occur.
+Example: /drag (100, 200) (300, 400)
+
+3. Sleep Command: /sleep [seconds]
+Format: /sleep [seconds]
+Parameters:
+seconds: Duration to pause execution (in seconds).
+Issues: Non-numeric values or negative numbers will cause an error, potentially leading to command execution failure.
+Example: /sleep 2
+
+4. Scroll Command: /scroll [direction] [amount]
+Format: /scroll [direction] [amount]
+Parameters:
+direction:
+Options: "up" or "down".
+Note: Misspelling or incorrect direction will cause the command to fail.
+amount: Number of scroll units (positive for "up", negative for "down").
+Issues: Non-integer values or excessively large amounts might not produce the intended scrolling effect.
+Example: /scroll up 3
+
+5. Type Command: /type "[text]"
+Format: /type "[text]"
+Parameters:
+text: The text to be typed, enclosed in double quotes.
+Issues: Special characters may not be typed correctly depending on the keyboard layout, or the program may not handle certain non-ASCII characters well.
+Example: /type "Hello World"
+
+6. Hold Key Command: /hold [key]
+Format: /hold [key]
+Parameters:
+key: The key to hold down.
+Common Keys: shift, ctrl, alt, capslock, tab, enter, etc.
+Issues:
+Keys like F1 to F12, PrtSc, Insert, Delete, etc., may not be recognized if not explicitly handled in the script.
+Misnaming the key will cause failure (e.g., /hold cntrl instead of /hold ctrl).
+Example: /hold shift
+
+7. Lift Key Command: /lift [key]
+Format: /lift [key]
+Parameters:
+key: The key to release.
+Issues: Similar to the hold command; if the key wasn't previously held or is misspelled, the command won't function as expected.
+Example: /lift shift
+
+8. Shortcut Command: /shortcut "[keys]"
+Format: /shortcut "[keys]"
+Parameters:
+keys: A combination of keys separated by + (e.g., ctrl+alt+del).
+Issues: If any key is misspelled, or if the combination includes unsupported keys, the command may fail. Not all combinations will work as intended in every application.
+Example: /shortcut "ctrl+alt+del"
+
+9. Tap Command: /tap [key]
+Format: /tap [key]
+Parameters:
+key: A single key to press and release.
+Common Keys: enter, space, esc, etc.
+Issues: If the key is not recognized (like some multimedia keys), the command may fail. Non-standard keys may require additional handling.
+Example: /tap enter
