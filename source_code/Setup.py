@@ -36,7 +36,7 @@ def create_executable():
         f'--hidden-import=Pillow --hidden-import=base64 '
         f'--hidden-import=os --hidden-import=datetime '
         f'--hidden-import=subprocess --hidden-import=threading '
-        f'--noconsole --name=v5 --icon="{icon_path}" v5.py'
+        f'--noconsole --name=v5 v5.py'
     )
     
     # Open PowerShell and run the command
